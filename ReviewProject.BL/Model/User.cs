@@ -9,6 +9,7 @@ namespace ReviewProject.BL.Model
     /// <summary>
     /// Пользователь.
     /// </summary>
+    [Serializable]
     public class User
     {
         #region Свойства
@@ -32,6 +33,10 @@ namespace ReviewProject.BL.Model
         /// Количество покупок.
         /// </summary>
         public int Buys { get; set; }
+        /// <summary>
+        /// Сумма всех покупок.
+        /// </summary>
+        public double SumOfBuys { get; set; }
         #endregion
         /// <summary>
         /// Создать нового пользователя.
@@ -41,7 +46,7 @@ namespace ReviewProject.BL.Model
         /// <param name="birthDate"> Дата рождения. </param>
         /// <param name="reviews"> Количество отзывов. </param>
         /// <param name="buys"> Количество покупок. </param>
-        public User(string name, Gender gender, DateTime birthDate, int reviews = 0, int buys = 0)
+        public User(string name, Gender gender, DateTime birthDate)
         {
             #region Проверка данных
             if (string.IsNullOrWhiteSpace(name))
@@ -57,19 +62,12 @@ namespace ReviewProject.BL.Model
             {
                 throw new ArgumentException("Некорректная дата рождения ", nameof(birthDate));
             }
-            if(reviews < 0)
-            {
-                throw new ArgumentException("Некорректное количество отзывов ", nameof(reviews));
-            }
-            if(buys < 0)
-            {
-                throw new ArgumentException("Некорректное количество покупок ", nameof(buys));
-            }
             #endregion
             Name = name;
             BirthDate = birthDate;
-            Reviews = reviews;
-            Buys = buys;
+            Reviews = 0;
+            Buys = 0;
+            SumOfBuys = 0.00;
         }
     }
 }

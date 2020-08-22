@@ -5,6 +5,7 @@ namespace ReviewProject.BL.Model
     /// <summary>
     /// Пол.
     /// </summary>
+    [Serializable]
     public class Gender
     {
         /// <summary>
@@ -21,6 +22,10 @@ namespace ReviewProject.BL.Model
             {
                 throw new ArgumentNullException("Имя пола не может быть пустым", nameof(name));
             }
+        }
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }
