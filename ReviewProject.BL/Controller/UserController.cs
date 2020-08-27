@@ -16,32 +16,35 @@ namespace ReviewProject.BL.Controller
     public class UserController
     {
         /// <summary>
-        /// Пользователь.
+        /// Пользователи.
         /// </summary>
-        public User User { get; }
+        public List<User> Users { get;  }
         /// <summary>
         /// Создать контроллер пользователя.
         /// </summary>
         /// <param name="user"> Пользователь. </param>
-        public UserController(string userName, string genderName, DateTime birthDate)
+        public User CurrentUser { get; }
+
+        public bool IsNewUser { get; } = false;
+        public UserController(string userName)
         {
             #region Проверка данных
             if (string.IsNullOrWhiteSpace(userName))
             {
                 throw new ArgumentException("Имя пользователя не может быть пустым ", nameof(userName));
             }
-
-            if (string.IsNullOrWhiteSpace(genderName))
-            {
-                throw new ArgumentException("Имя пола не может быть пустым ", nameof(genderName));
-            }
-            if(birthDate < DateTime.Parse("01.01.1910") || birthDate >= DateTime.Now)
-            {
-                throw new ArgumentException("Дата рождения некорректна", nameof(birthDate));
-            }
             #endregion
-            var gender = new Gender(genderName);
-            User = new User(userName, gender, birthDate);
+
+            Users = GetUsersData();
+            CurrentUser = Users.SingleOrDefault(u => u.Name == userName);
+
+            if(CurrentUser == null)
+            {
+                CurrentUser = new User(userName);
+                IsNewUser = true;
+                Users.Add(CurrentUser);
+                Save();
+            }
         }
         /// <summary>
         /// Сохранить данные пользователя.
@@ -51,24 +54,44 @@ namespace ReviewProject.BL.Controller
             var binFormatter = new BinaryFormatter();
             using(var fs = new FileStream("users.dat", FileMode.OpenOrCreate))
             {
-                binFormatter.Serialize(fs, User);
+                binFormatter.Serialize(fs, Users);
             }
         }
         /// <summary>
-        /// Получить данные пользователя.
+        /// Установить значения свойств для нового пользователя.
+        /// </summary>
+        /// <param name="genderName"> Пол. </param>
+        /// <param name="birthDate"> Дата рождения. </param>
+        /// <param name="buys"> Количество покупок. </param>
+        /// <param name="sumOfBuys"> Сумма всех покупок. </param>
+        public void SetNewUserData(string genderName, DateTime birthDate, int buys = 0, double sumOfBuys = 0.00)
+        {
+            // Проверка.
+            CurrentUser.Gender = new Gender(genderName);
+            CurrentUser.BirthDate = birthDate;
+            CurrentUser.Buys = buys;
+            CurrentUser.SumOfBuys = sumOfBuys;
+            Save();
+        }
+        /// <summary>
+        /// Получить сохранённый список пользователей.
         /// </summary>
         /// <returns></returns>
-        public UserController()
+        private List<User> GetUsersData()
         {
             var binFormatter = new BinaryFormatter();
             using (var fs = new FileStream("users.dat", FileMode.OpenOrCreate))
             {
-                if(binFormatter.Deserialize(fs) is User user)
+                if(binFormatter.Deserialize(fs) is List<User> users)
                 {
-                    User = user;
+                    return users;
                 }
-                // TODO: Если пользователя не удалось прочитать.
+                else
+                {
+                    return new List<User>();
+                }
             }
         }
+
     }
 }

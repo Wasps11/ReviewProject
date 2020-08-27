@@ -20,11 +20,11 @@ namespace ReviewProject.BL.Model
         /// <summary>
         /// Пол.
         /// </summary>
-        public Gender Gender { get; }
+        public Gender Gender { get; set; }
         /// <summary>
         /// Дата рождения.
         /// </summary>
-        public DateTime BirthDate { get; }
+        public DateTime BirthDate { get; set; }
         /// <summary>
         /// Количество отзывов.
         /// </summary>
@@ -37,6 +37,11 @@ namespace ReviewProject.BL.Model
         /// Сумма всех покупок.
         /// </summary>
         public double SumOfBuys { get; set; }
+        /// <summary>
+        /// Возраст пользователя.
+        /// </summary>
+        public int Age { get { return DateTime.Now.Year - BirthDate.Year; } }    
+
         #endregion
         /// <summary>
         /// Создать нового пользователя.
@@ -46,7 +51,7 @@ namespace ReviewProject.BL.Model
         /// <param name="birthDate"> Дата рождения. </param>
         /// <param name="reviews"> Количество отзывов. </param>
         /// <param name="buys"> Количество покупок. </param>
-        public User(string name, Gender gender, DateTime birthDate)
+        public User(string name, Gender gender, DateTime birthDate, int buys = 0, double sumOfBuys = 0.00)
         {
             #region Проверка данных
             if (string.IsNullOrWhiteSpace(name))
@@ -62,12 +67,34 @@ namespace ReviewProject.BL.Model
             {
                 throw new ArgumentException("Некорректная дата рождения ", nameof(birthDate));
             }
+            if(buys < 0)
+            {
+                throw new ArgumentNullException("Количество покупок не может быть меньше 0", nameof(buys));
+            }
+            if(sumOfBuys < 0.0)
+            {
+                throw new ArgumentNullException("Сумма покупок не может быть меньше 0", nameof(sumOfBuys));
+            }
             #endregion
             Name = name;
             BirthDate = birthDate;
             Reviews = 0;
-            Buys = 0;
-            SumOfBuys = 0.00;
+            Buys = buys ;
+            SumOfBuys = sumOfBuys;
+        }
+
+        public User (string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Имя пользователя не может быть пустым ", nameof(name));
+            }
+            Name = name;
+        }
+
+        public override string ToString()
+        {
+            return Name + " количество покупок: " + Buys;
         }
     }
 }
