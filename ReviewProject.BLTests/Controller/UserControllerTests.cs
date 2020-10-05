@@ -33,19 +33,19 @@ namespace ReviewProject.BL.Controller.Tests
             var genderName = Guid.NewGuid().ToString();
             DateTime birthDate = DateTime.Parse("10.02.1999");
             var rnd = new Random();
-            var buys = Convert.ToInt32(rnd.Next(0, 100));
-            var sumOfBuys = Convert.ToInt32(rnd.Next(101, 201));
+            var height = Convert.ToInt32(rnd.Next(100, 191));
+            var weight = Convert.ToInt32(rnd.Next(70, 90));
             var controller = new UserController(userName);
 
-            controller.SetNewUserData(genderName, birthDate, buys, sumOfBuys);
+            controller.SetNewUserData(genderName, birthDate);
             var controller2 = new UserController(userName);
             var currentUser = controller.CurrentUser;
 
             Assert.AreEqual(currentUser.Name, userName);
             //Assert.AreEqual(currentUser.Gender.Name, genderName);
             Assert.AreEqual(currentUser.BirthDate, birthDate);
-            Assert.AreEqual(currentUser.Buys, buys);
-            Assert.AreEqual(currentUser.SumOfBuys, sumOfBuys);
+            Assert.AreEqual(currentUser.Height, height);
+            Assert.AreEqual(currentUser.Weight, weight);
         }
 
     }

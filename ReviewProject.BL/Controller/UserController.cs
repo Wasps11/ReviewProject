@@ -62,15 +62,11 @@ namespace ReviewProject.BL.Controller
         /// </summary>
         /// <param name="genderName"> Пол. </param>
         /// <param name="birthDate"> Дата рождения. </param>
-        /// <param name="buys"> Количество покупок. </param>
-        /// <param name="sumOfBuys"> Сумма всех покупок. </param>
-        public void SetNewUserData(string genderName, DateTime birthDate, int buys = 0, double sumOfBuys = 0.00)
+        public void SetNewUserData(string genderName, DateTime birthDate)
         {
             // Проверка.
             CurrentUser.Gender = new Gender(genderName);
             CurrentUser.BirthDate = birthDate;
-            CurrentUser.Buys = buys;
-            CurrentUser.SumOfBuys = sumOfBuys;
             Save();
         }
         /// <summary>

@@ -26,17 +26,13 @@ namespace ReviewProject.BL.Model
         /// </summary>
         public DateTime BirthDate { get; set; }
         /// <summary>
-        /// Количество отзывов.
+        /// Рост.
         /// </summary>
-        public int Reviews { get; set; }
+        public double Height { get; set; }
         /// <summary>
-        /// Количество покупок.
+        /// Вес.
         /// </summary>
-        public int Buys { get; set; }
-        /// <summary>
-        /// Сумма всех покупок.
-        /// </summary>
-        public double SumOfBuys { get; set; }
+        public double Weight { get; set; }
         /// <summary>
         /// Возраст пользователя.
         /// </summary>
@@ -51,7 +47,7 @@ namespace ReviewProject.BL.Model
         /// <param name="birthDate"> Дата рождения. </param>
         /// <param name="reviews"> Количество отзывов. </param>
         /// <param name="buys"> Количество покупок. </param>
-        public User(string name, Gender gender, DateTime birthDate, int buys = 0, double sumOfBuys = 0.00)
+        public User(string name, Gender gender, DateTime birthDate, double height, double weight)
         {
             #region Проверка данных
             if (string.IsNullOrWhiteSpace(name))
@@ -67,20 +63,19 @@ namespace ReviewProject.BL.Model
             {
                 throw new ArgumentException("Некорректная дата рождения ", nameof(birthDate));
             }
-            if(buys < 0)
+            if(height <= 0)
             {
-                throw new ArgumentNullException("Количество покупок не может быть меньше 0", nameof(buys));
+                throw new ArgumentNullException("Рост не может быть меньше или равным 0", nameof(height));
             }
-            if(sumOfBuys < 0.0)
+            if(weight <= 0)
             {
-                throw new ArgumentNullException("Сумма покупок не может быть меньше 0", nameof(sumOfBuys));
+                throw new ArgumentNullException("Вес не может быть меньше или равным 0", nameof(weight));
             }
             #endregion
             Name = name;
             BirthDate = birthDate;
-            Reviews = 0;
-            Buys = buys ;
-            SumOfBuys = sumOfBuys;
+            Height = height;
+            Weight = weight;
         }
 
         public User (string name)
@@ -94,7 +89,7 @@ namespace ReviewProject.BL.Model
 
         public override string ToString()
         {
-            return Name + " количество покупок: " + Buys;
+            return Name + " Возраст: " + Age + " лет.";
         }
     }
 }
